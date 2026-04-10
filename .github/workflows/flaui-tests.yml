@@ -35,7 +35,7 @@ jobs:
     - name: Run FlaUI NUnit Tests
       # Added the logger flag back since you added [AllureNUnit] to your code
       run: |
-        dotnet test FlaUITests/FlaUITests.csproj --configuration Release --no-build --logger:"allure"
+        dotnet test FlaUITests/FlaUITests.csproj --configuration Release --no-build
       continue-on-error: true 
 
     - name: Setup Allure

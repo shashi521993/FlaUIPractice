@@ -31,7 +31,7 @@
     <None Include="packages.config" />
     <Content Include="Resources\WhereIsMyCursor.exe" />
     <Content Include="Resources\WinFormsApplication.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\WpfApplication.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

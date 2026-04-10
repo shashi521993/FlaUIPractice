@@ -7,6 +7,7 @@ using FlaUI.Core.Input;
 using FlaUI.Core.WindowsAPI;
 using FlaUI.UIA2;
 using FlaUI.UIA3;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
@@ -99,7 +100,8 @@ namespace FlaUiTests
         [TestMethod]
         public void TestMenuControls()
         {
-            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WinFormsApplication.exe");
+            // Combine paths to reach the Resources folder inside the bin directory
+            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "WinFormsApplication.exe");
             var application = FlaUI.Core.Application.Launch(exePath);
 
             //var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\FlaUiTests\Resources\WinFormsApplication.exe");

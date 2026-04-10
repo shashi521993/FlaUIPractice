@@ -1,4 +1,5 @@
 ﻿using Allure.Net.Commons;
+using Allure.NUnit;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Capturing;
@@ -20,6 +21,7 @@ using System.Windows.Media;
 namespace FlaUiTests
 {
     [TestFixture]
+    [AllureNUnit]
     public class UnitTest1
     {
         Application application;

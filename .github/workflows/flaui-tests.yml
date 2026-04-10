@@ -21,6 +21,9 @@ jobs:
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1
 
+    - name: Setup VSTest
+      uses: microsoft/setup-vstest@v1.2  # <--- Add this step
+
     - name: Restore NuGet Packages
       run: nuget restore FlaUIPractice.sln
 

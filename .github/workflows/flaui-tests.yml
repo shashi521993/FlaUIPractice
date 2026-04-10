@@ -37,12 +37,15 @@ jobs:
         dotnet test FlaUITests/FlaUITests.csproj --configuration Release --no-build
       continue-on-error: true 
 
-    # ✅ Install Allure CLI (Windows supported)
-    - name: Install Allure
+    # ✅ Download and setup Allure CLI manually
+    - name: Download Allure CLI
       if: always()
-      run: choco install allure.commandline -y
+      run: |
+        curl -Lo allure.zip https://github.com/allure-framework/allure2/releases/latest/download/allure-2.27.0.zip
+        tar -xf allure.zip
+        echo "$PWD/allure-2.27.0/bin" >> $env:GITHUB_PATH
 
-    # ✅ Generate Allure Report using CLI
+    # ✅ Generate Allure Report
     - name: Generate Allure Report
       if: always()
       run: |

@@ -21,9 +21,6 @@ jobs:
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1
 
-    - name: Setup VSTest
-      uses: microsoft/setup-vstest@v1.2  # <--- Add this step
-
     - name: Restore NuGet Packages
       run: nuget restore FlaUIPractice.sln
 
@@ -34,8 +31,8 @@ jobs:
       # We use 'vstest.console.exe' to run the tests. 
       # The runner handles the interactive session by default on windows-latest, 
       # but some complex UI interactions might require a screen resolution tweak.
-      run: |
-        vstest.console.exe FlaUITests\bin\Release\FlaUITests.dll
+      run: 
+       dotnet test FlaUITests/FlaUITests.csproj --configuration Release --no-build
       
     - name: Upload Screenshots on Failure
       if: failure()

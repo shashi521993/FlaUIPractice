@@ -30,6 +30,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <Content Include="..\BankSystem\bin\Release\Data.txt" Link="Data.txt" />
+    <Content Include="..\BankSystem\bin\Release\Logs.txt" Link="Logs.txt" />
     <Content Include="Resources\WhereIsMyCursor.exe" />
     <Content Include="Resources\WinFormsApplication.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

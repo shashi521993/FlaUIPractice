@@ -8,8 +8,7 @@ using FlaUI.Core.Input;
 using FlaUI.Core.WindowsAPI;
 using FlaUI.UIA2;
 using FlaUI.UIA3;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -20,13 +19,12 @@ using System.Windows.Media;
 
 namespace FlaUiTests
 {
-    [TestClass]
+    [TestFixture]
     public class UnitTest1
     {
         Application application;
-        public TestContext TestContext { get; set; }
 
-        [TestMethod]
+        [Test]
         public void newUserRegistration()
         {
 
@@ -80,7 +78,7 @@ namespace FlaUiTests
             exitWindow.FindFirstDescendant(cf.ByName("Yes")).AsButton().Click();
         }
 
-        [TestMethod]
+        [Test]
         public void TestFindMethods()
         {
             string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BankSystem.exe");
@@ -102,7 +100,7 @@ namespace FlaUiTests
             //Thread.Sleep(500);
         }
 
-        [TestMethod]
+        [Test]
         public void TestMenuControls()
         {
             // Combine paths to reach the Resources folder inside the bin directory
@@ -123,7 +121,7 @@ namespace FlaUiTests
             contextMenu.Items[0].DrawHighlight();
         }
 
-        [TestMethod]
+        [Test]
         public void TestMouseActions()
         {
             // Ensure you are using System.Drawing.Point
@@ -138,7 +136,7 @@ namespace FlaUiTests
             Mouse.LeftClick(point);
         }
 
-        [TestMethod]
+        [Test]
         public void TestCaptureMethod()
         {
             string screenshotDir = @"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\Screenshots";
@@ -173,16 +171,16 @@ namespace FlaUiTests
             application.Close();
         }
 
-        [TestMethod]
+        [Test]
         public void TestPatterns()
         {
 
         }
 
-        [TestCleanup]
+        [TearDown]
         public void Cleanup()
         {
-            if (TestContext.CurrentTestOutcome != UnitTestOutcome.Passed)
+            if (TestContext.CurrentContext.Result.Outcome.Status != NUnit.Framework.Interfaces.TestStatus.Passed)
             {
                 // 2. Fix: Define screenshot directory locally or via class variable
                 string screenshotDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ReportScreenshots");
@@ -191,7 +189,7 @@ namespace FlaUiTests
                     Directory.CreateDirectory(screenshotDir);
                 }
 
-                string fileName = $"{TestContext.TestName}_Failure.png";
+                string fileName = $"{TestContext.CurrentContext.Test.Name}_Failure.png";
                 string path = Path.Combine(screenshotDir, fileName);
 
                 try

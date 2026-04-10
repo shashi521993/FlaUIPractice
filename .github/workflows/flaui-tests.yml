@@ -1,4 +1,4 @@
-name: FlaUI Automation Tests with Allure
+name: FlaUI NUnit Automation Tests
 
 on:
   push:
@@ -32,12 +32,11 @@ jobs:
     - name: Build Solution
       run: msbuild FlaUIPractice.sln /p:Configuration=Release
 
-    - name: Run FlaUI Tests
-      # We add the logger for allure. 
-      # Ensure the 'Allure.TestTools' or similar adapter is in your NuGet dependencies.
+    - name: Run FlaUI NUnit Tests
+      # Using NUnit with the Allure logger
       run: |
         dotnet test FlaUITests/FlaUITests.csproj --configuration Release --no-build --logger:"allure"
-      continue-on-error: true # Allows report generation even if tests fail
+      continue-on-error: true 
 
     - name: Get Allure History
       uses: actions/checkout@v4
@@ -63,9 +62,10 @@ jobs:
         path: allure-report
 
     - name: Upload Screenshots on Failure
-      if: failure()
+      # Changed path to 'ReportScreenshots' to match your NUnit Cleanup code
+      if: always() 
       uses: actions/upload-artifact@v4
       with:
         name: test-screenshots
-        path: FlaUIPractice/ReportScreenshots/
+        path: FlaUITests/bin/Release/net6.0-windows/ReportScreenshots/
         if-no-files-found: ignore

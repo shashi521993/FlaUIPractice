@@ -99,7 +99,10 @@ namespace FlaUiTests
         [TestMethod]
         public void TestMenuControls()
         {
-            var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\FlaUiTests\Resources\WinFormsApplication.exe");
+            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WinFormsApplication.exe");
+            var application = FlaUI.Core.Application.Launch(exePath);
+
+            //var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\FlaUiTests\Resources\WinFormsApplication.exe");
             var automation = new UIA3Automation();
             var mainWindow = application.GetMainWindow(automation);
             ConditionFactory cf = new ConditionFactory(new UIA3PropertyLibrary());

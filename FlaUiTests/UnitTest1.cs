@@ -23,14 +23,14 @@ namespace FlaUiTests
         [TestMethod]
         public void newUserRegistration()
         {
-           /* String basePath = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory())));
 
-           var FileStream = new FileStream(basePath + "//BankSystem//bin//Release//Data.txt", FileMode.Open, FileAccess.ReadWrite);
-           var Br = new BinaryReader(FileStream);
-            var Bw = new BinaryWriter(FileStream);*/
-            
+           
 
-            var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\BankSystem\bin\Release\BankSystem.exe");
+
+            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BankSystem.exe");
+            var application = FlaUI.Core.Application.Launch(exePath);
+
+            //var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\BankSystem\bin\Release\BankSystem.exe");
             var automation = new UIA3Automation();
             var mainWindow = application.GetMainWindow(automation);
             ConditionFactory cf = new ConditionFactory(new UIA3PropertyLibrary());
@@ -77,7 +77,10 @@ namespace FlaUiTests
         [TestMethod]
         public void TestFindMethods()
         {
-            var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\BankSystem\bin\Release\BankSystem.exe");
+            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BankSystem.exe");
+            var application = FlaUI.Core.Application.Launch(exePath);
+
+            //var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\BankSystem\bin\Release\BankSystem.exe");
             var automation = new UIA3Automation();
             var mainWindow = application.GetMainWindow(automation);
             ConditionFactory cf = new ConditionFactory(new UIA3PropertyLibrary());
@@ -138,7 +141,10 @@ namespace FlaUiTests
             fullscreenImg.ToFile(Path.Combine(screenshotDir, "Full Screen.png"));
 
             // 2. Only one automation element
-            var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\BankSystem\bin\Release\BankSystem.exe");
+            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BankSystem.exe");
+            var application = FlaUI.Core.Application.Launch(exePath);
+
+            //var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\BankSystem\bin\Release\BankSystem.exe");
             var automation = new UIA3Automation();
             var mainWindow = application.GetMainWindow(automation);
             ConditionFactory cf = new ConditionFactory(new UIA3PropertyLibrary());

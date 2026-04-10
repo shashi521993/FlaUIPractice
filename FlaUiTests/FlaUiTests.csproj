@@ -25,10 +25,15 @@
 
   <ItemGroup>
     <!-- Rely on SDK implicit Compile items. Do not include explicit <Compile> for files that are already in the project folder. -->
+    <None Include="..\BankSystem\bin\Release\BankSystem.exe" Link="BankSystem.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <Content Include="Resources\WhereIsMyCursor.exe" />
     <Content Include="Resources\WinFormsApplication.exe" />
-    <Content Include="Resources\WpfApplication.exe" />
+    <Content Include="Resources\WpfApplication.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <!-- If you no longer need packages.config, delete it after restoring packages and verifying builds -->

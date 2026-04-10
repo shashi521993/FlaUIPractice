@@ -37,9 +37,7 @@ jobs:
       run: |
         dotnet test FlaUITests/FlaUITests.csproj --configuration Release --no-build
       continue-on-error: true 
-
     - name: Setup Allure
-      # This works on Windows because it's not a Docker container
       uses: allure-framework/setup-allure@v1
       if: always()
       with:
@@ -47,10 +45,12 @@ jobs:
 
     - name: Generate Allure Report
       if: always()
-      # Use the allure-results path from your build output
       run: |
+        # Create directory if it doesn't exist to prevent generation failure
+        if (!(Test-Path "FlaUITests/bin/Release/net6.0-windows/allure-results")) { 
+          New-Item -ItemType Directory -Force -Path "FlaUITests/bin/Release/net6.0-windows/allure-results" 
+        }
         allure generate FlaUITests/bin/Release/net6.0-windows/allure-results --clean -o allure-report
-
     - name: Upload Allure Report as Artifact
       if: always()
       uses: actions/upload-artifact@v4

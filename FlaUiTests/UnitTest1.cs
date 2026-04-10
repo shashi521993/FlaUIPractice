@@ -1,4 +1,5 @@
-﻿using FlaUI.Core;
+﻿using Allure.Net.Commons;
+using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Capturing;
 using FlaUI.Core.Conditions;
@@ -14,6 +15,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading;
+using System.Windows.Automation;
 using System.Windows.Media;
 
 namespace FlaUiTests
@@ -21,6 +23,9 @@ namespace FlaUiTests
     [TestClass]
     public class UnitTest1
     {
+        Application application;
+        public TestContext TestContext { get; set; }
+
         [TestMethod]
         public void newUserRegistration()
         {
@@ -29,7 +34,7 @@ namespace FlaUiTests
 
 
             string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BankSystem.exe");
-            var application = FlaUI.Core.Application.Launch(exePath);
+            application = FlaUI.Core.Application.Launch(exePath);
 
             //var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\BankSystem\bin\Release\BankSystem.exe");
             var automation = new UIA3Automation();
@@ -79,7 +84,7 @@ namespace FlaUiTests
         public void TestFindMethods()
         {
             string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BankSystem.exe");
-            var application = FlaUI.Core.Application.Launch(exePath);
+            application = FlaUI.Core.Application.Launch(exePath);
 
             //var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\BankSystem\bin\Release\BankSystem.exe");
             var automation = new UIA3Automation();
@@ -87,7 +92,7 @@ namespace FlaUiTests
             ConditionFactory cf = new ConditionFactory(new UIA3PropertyLibrary());
 
             var elements = mainWindow.FindAll(FlaUI.Core.Definitions.TreeScope.Children,
-                new PropertyCondition(automation.PropertyLibrary.Element.ControlType, FlaUI.Core.Definitions.ControlType.Edit));
+                new FlaUI.Core.Conditions.PropertyCondition(automation.PropertyLibrary.Element.ControlType, FlaUI.Core.Definitions.ControlType.Edit));
             foreach (var item in elements)
             {
                 item.DrawHighlight();
@@ -102,7 +107,7 @@ namespace FlaUiTests
         {
             // Combine paths to reach the Resources folder inside the bin directory
             string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "WinFormsApplication.exe");
-            var application = FlaUI.Core.Application.Launch(exePath);
+             application = FlaUI.Core.Application.Launch(exePath);
 
             //var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\FlaUiTests\Resources\WinFormsApplication.exe");
             var automation = new UIA3Automation();
@@ -147,7 +152,7 @@ namespace FlaUiTests
 
             // 2. Only one automation element
             string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BankSystem.exe");
-            var application = FlaUI.Core.Application.Launch(exePath);
+            application = FlaUI.Core.Application.Launch(exePath);
 
             //var application = FlaUI.Core.Application.Launch(@"D:\GitClonedRepo\FlaUIPractice-master\FlaUIPractice-master\FlaUIPractice\BankSystem\bin\Release\BankSystem.exe");
             var automation = new UIA3Automation();
@@ -172,6 +177,51 @@ namespace FlaUiTests
         public void TestPatterns()
         {
 
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            if (TestContext.CurrentTestOutcome != UnitTestOutcome.Passed)
+            {
+                // 2. Fix: Define screenshot directory locally or via class variable
+                string screenshotDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ReportScreenshots");
+                if (!Directory.Exists(screenshotDir))
+                {
+                    Directory.CreateDirectory(screenshotDir);
+                }
+
+                string fileName = $"{TestContext.TestName}_Failure.png";
+                string path = Path.Combine(screenshotDir, fileName);
+
+                try
+                {
+                    var screenshot = Capture.Screen();
+                    screenshot.ToFile(path);
+
+                    // FIX: Use AllureApi instead of AllureLifecycle
+                    AllureApi.AddAttachment("Failure Screenshot", "image/png", path);
+
+                    // 3. Fix: Use the correct Allure attachment method
+                    // Allure.Net.Commons uses AddAttachment on the lifecycle instance
+                    /*AllureLifecycle.Instance.AddAttachment(
+                        name: "Failure Screenshot",
+                        type: "image/png",
+                        path: path
+                    );*/
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to capture screenshot: {ex.Message}");
+                }
+            }
+
+            // Cleanup FlaUI resources
+           // automation?.Dispose();
+            if (application != null && !application.HasExited)
+            {
+                application.Close();
+            }
         }
     }
 }

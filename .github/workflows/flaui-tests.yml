@@ -33,9 +33,8 @@ jobs:
       run: msbuild FlaUIPractice.sln /p:Configuration=Release
 
     - name: Run FlaUI NUnit Tests
-      # Using NUnit with the Allure logger
       run: |
-        dotnet test FlaUITests/FlaUITests.csproj --configuration Release --no-build --logger:"allure"
+        dotnet test FlaUITests/FlaUITests.csproj --configuration Release --no-build --logger:"allure;LogFileName=allure-results"
       continue-on-error: true 
 
     - name: Get Allure History

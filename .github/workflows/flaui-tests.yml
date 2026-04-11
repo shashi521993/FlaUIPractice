@@ -37,19 +37,25 @@ jobs:
         dotnet test FlaUITests/FlaUITests.csproj --configuration Release --no-build
       continue-on-error: true 
 
-    # ✅ Download and setup Allure CLI manually
-    - name: Download Allure CLI
+    # ✅ Fix 1: Use PowerShell to download and extract (handles redirects properly)
+    - name: Download and Setup Allure CLI
       if: always()
+      shell: pwsh
       run: |
-        curl -Lo allure.zip https://github.com/allure-framework/allure2/releases/latest/download/allure-2.27.0.zip
-        tar -xf allure.zip
-        echo "$PWD/allure-2.27.0/bin" >> $env:GITHUB_PATH
+        $allureVersion = "2.27.0"
+        $url = "https://github.com/allure-framework/allure2/releases/download/$allureVersion/allure-$allureVersion.zip"
+        Write-Host "Downloading Allure from $url"
+        Invoke-WebRequest -Uri $url -OutFile "allure.zip"
+        Expand-Archive -Path "allure.zip" -DestinationPath "." -Force
+        # Verify extraction
+        Get-ChildItem -Path "./allure-$allureVersion/bin"
 
-    # ✅ Generate Allure Report
+    # ✅ Fix 2: Use the explicit relative path to call allure.bat
     - name: Generate Allure Report
       if: always()
+      shell: pwsh
       run: |
-        allure generate FlaUITests/bin/Release/net6.0-windows/allure-results --clean -o allure-report
+        ./allure-2.27.0/bin/allure.bat generate FlaUITests/bin/Release/net6.0-windows/allure-results --clean -o allure-report
 
     - name: Upload Allure Report as Artifact
       if: always()

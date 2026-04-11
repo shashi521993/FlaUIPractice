@@ -37,32 +37,34 @@ jobs:
         dotnet test FlaUITests/FlaUITests.csproj --configuration Release --no-build
       continue-on-error: true 
 
-    # ✅ Fix 1: Use PowerShell to download and extract (handles redirects properly)
     - name: Download and Setup Allure CLI
       if: always()
       shell: pwsh
       run: |
         $allureVersion = "2.27.0"
         $url = "https://github.com/allure-framework/allure2/releases/download/$allureVersion/allure-$allureVersion.zip"
-        Write-Host "Downloading Allure from $url"
         Invoke-WebRequest -Uri $url -OutFile "allure.zip"
         Expand-Archive -Path "allure.zip" -DestinationPath "." -Force
-        # Verify extraction
-        Get-ChildItem -Path "./allure-$allureVersion/bin"
 
-    # ✅ Fix 2: Use the explicit relative path to call allure.bat
+    # ✅ Key Fix: Added --single-file so the report opens in any browser locally
     - name: Generate Allure Report
       if: always()
       shell: pwsh
       run: |
-        ./allure-2.27.0/bin/allure.bat generate FlaUITests/bin/Release/net6.0-windows/allure-results --clean -o allure-report
+        $resultsPath = "FlaUITests/bin/Release/net6.0-windows/allure-results"
+        if (Test-Path $resultsPath) {
+            ./allure-2.27.0/bin/allure.bat generate $resultsPath --clean --single-file -o allure-report
+        } else {
+            Write-Error "Allure results directory not found at $resultsPath"
+            exit 1
+        }
 
     - name: Upload Allure Report as Artifact
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: allure-report
-        path: allure-report
+        path: allure-report/index.html # Now just uploading the single file
 
     - name: Upload Screenshots on Failure
       if: always() 
